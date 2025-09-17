@@ -35,9 +35,9 @@ export function PatientCard({
           <span className="font-medium text-foreground">Gender</span>
           <span>{gender}</span>
         </div>
-        <div className="pt-4">
-          <Button onClick={onViewReport} variant="outline" className="w-full">
-            View Report
+        <div className="pt-4 flex w-full justify-end">
+          <Button onClick={onViewReport} variant="outline">
+            Call Summary
           </Button>
         </div>
       </CardContent>

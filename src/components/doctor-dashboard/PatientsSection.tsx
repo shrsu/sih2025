@@ -66,7 +66,7 @@ function PatientsSection({ calls }: { calls: EnrichedCall[] }) {
               <div className="flex flex-col h-full">
                 <div className="sticky top-0 z-10 bg-background px-6 py-6 flex items-center justify-between">
                   <h2 className="text-2xl font-semibold text-primary">
-                    Report
+                    Call Summary
                   </h2>
                   <Button
                     size="icon"
