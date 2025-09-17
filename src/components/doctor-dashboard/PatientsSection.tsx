@@ -11,7 +11,13 @@ import patientData from "./patientData.json";
 import ReportSection from "./ReportSection";
 
 function PatientsSection() {
-  const [selectedReport, setSelectedReport] = useState<string | null>(null);
+  const [selectedPatient, setSelectedPatient] = useState<{
+    name: string;
+    age: number;
+    gender: string;
+    date: string;
+    report: string;
+  } | null>(null);
 
   return (
     <div className="h-[calc(100vh-64px)] border-t">
@@ -36,7 +42,7 @@ function PatientsSection() {
                     age={patient.age}
                     gender={patient.gender}
                     date={patient.date}
-                    onViewReport={() => setSelectedReport(patient.report)}
+                    onViewReport={() => setSelectedPatient(patient)}
                   />
                 ))}
               </div>
@@ -44,7 +50,7 @@ function PatientsSection() {
           </div>
         </ResizablePanel>
 
-        {selectedReport && (
+        {selectedPatient && (
           <>
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={30} className="h-full">
@@ -55,15 +61,14 @@ function PatientsSection() {
                   </h2>
                   <Button
                     size="icon"
-                    variant="ghost"
-                    onClick={() => setSelectedReport(null)}
-                    className="text-muted-foreground hover:text-destructive"
+                    variant="destructive"
+                    onClick={() => setSelectedPatient(null)}
                   >
-                    <X className="h-4 w-4" />
+                    <X />
                   </Button>
                 </div>
                 <div className="flex-1 overflow-y-auto">
-                  <ReportSection report={selectedReport} />
+                  <ReportSection patient={selectedPatient} />
                 </div>
               </div>
             </ResizablePanel>
