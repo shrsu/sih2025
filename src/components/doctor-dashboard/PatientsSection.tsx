@@ -36,11 +36,7 @@ function PatientsSection({ calls }: { calls: EnrichedCall[] }) {
             </div>
             <div className="flex-1 overflow-y-auto p-8 pt-6">
               <div
-                className="grid gap-6"
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                }}
+              className="flex gap-6"
               >
                 {calls.map((call) => (
                   <PatientCard
