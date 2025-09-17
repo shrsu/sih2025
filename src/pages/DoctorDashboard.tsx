@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/sidebar/AppSidebar";
 import { Button } from "@/components/ui/button";
+import PatientsSection from "@/components/doctor-dashboard/PatientsSection";
 
 function DoctorDashboard() {
   const sidebarState: boolean = Cookies.get("sidebar_state") === "true";
@@ -19,11 +20,7 @@ function DoctorDashboard() {
           <ModeToggle />
         </header>
 
-        <div className="p-8">
-          <h1 className="text-2xl font-bold text-primary">
-            Patients
-          </h1>
-        </div>
+        <PatientsSection />
       </main>
     </SidebarProvider>
   );
