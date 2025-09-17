@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 
 interface PatientCardProps {
   name: string;
-  age: number;
   gender: string;
   date: string;
   onViewReport: () => void;
@@ -17,7 +16,6 @@ interface PatientCardProps {
 
 export function PatientCard({
   name,
-  age,
   gender,
   date,
   onViewReport,
@@ -33,10 +31,6 @@ export function PatientCard({
         </CardDescription>
       </CardHeader>
       <CardContent className="mt-2 text-sm text-muted-foreground space-y-2">
-        <div className="flex justify-between">
-          <span className="font-medium text-foreground">Age</span>
-          <span>{age}</span>
-        </div>
         <div className="flex justify-between">
           <span className="font-medium text-foreground">Gender</span>
           <span>{gender}</span>

@@ -7,17 +7,24 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import patientData from "./patientData.json";
 import ReportSection from "./ReportSection";
 
-function PatientsSection() {
-  const [selectedPatient, setSelectedPatient] = useState<{
-    name: string;
-    age: number;
-    gender: string;
-    date: string;
-    report: string;
-  } | null>(null);
+type EnrichedCall = {
+  _id: string;
+  name: string;
+  gender: "male" | "female";
+  aiAnalysis: {
+    shortSummary: string;
+    detailedSummary: string;
+    transcript: string;
+  };
+  createdAt?: string;
+};
+
+function PatientsSection({ calls }: { calls: EnrichedCall[] }) {
+  const [selectedPatient, setSelectedPatient] = useState<EnrichedCall | null>(
+    null
+  );
 
   return (
     <div className="h-[calc(100vh-64px)] border-t">
@@ -35,14 +42,20 @@ function PatientsSection() {
                   gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
                 }}
               >
-                {patientData.map((patient, index) => (
+                {calls.map((call) => (
                   <PatientCard
-                    key={index}
-                    name={patient.name}
-                    age={patient.age}
-                    gender={patient.gender}
-                    date={patient.date}
-                    onViewReport={() => setSelectedPatient(patient)}
+                    key={call._id}
+                    name={call.name}
+                    gender={call.gender}
+                    
+                    date={
+                      call.createdAt
+                        ? new Date(call.createdAt).toLocaleDateString()
+                        : new Date(
+                            parseInt(call._id.substring(0, 8), 16) * 1000
+                          ).toLocaleDateString()
+                    }
+                    onViewReport={() => setSelectedPatient(call)}
                   />
                 ))}
               </div>

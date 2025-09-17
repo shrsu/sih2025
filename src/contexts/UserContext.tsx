@@ -15,7 +15,7 @@ interface UserContextType {
 
 interface UserContextValue {
   user: UserContextType;
-  setUser: React.Dispatch<React.SetStateAction<UserContextType>>;
+  setUser: (user: UserContextType) => void;
 }
 
 const UserContext = createContext<UserContextValue | undefined>(undefined);
@@ -27,20 +27,21 @@ interface UserProviderProps {
 const LOCAL_STORAGE_KEY = "nirmaya-user";
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<UserContextType>({
+  const [user, _setUser] = useState<UserContextType>({
     loggedIn: false,
     name: "",
     email: "",
     role: "",
   });
 
+  // Load user from localStorage on first mount
   useEffect(() => {
     const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
         if (parsed && typeof parsed === "object") {
-          setUser(parsed);
+          _setUser(parsed);
         }
       } catch (err) {
         console.error("Failed to parse user from localStorage:", err);
@@ -48,9 +49,11 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     }
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(user));
-  }, [user]);
+  // Wrap setUser to persist only when explicitly called
+  const setUser = (newUser: UserContextType) => {
+    _setUser(newUser);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newUser));
+  };
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
