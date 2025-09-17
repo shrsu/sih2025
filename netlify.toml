@@ -1,6 +1,6 @@
 # Netlify configuration file
 [build]
-  publish = "build"
+  publish = "dist"
   command = "npm run build"
 
 [dev]
