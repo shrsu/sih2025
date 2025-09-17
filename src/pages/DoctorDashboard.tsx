@@ -12,7 +12,7 @@ function DoctorDashboard() {
     <SidebarProvider defaultOpen={sidebarState}>
       <AppSidebar />
       <main className="flex w-full flex-col min-h-screen">
-        <header className="flex w-full justify-between pr-8 pl-4 py-4 sticky top-0 bg-background">
+        <header className="flex w-full justify-between pr-8 h-16 pl-4 py-4 sticky top-0 bg-background">
           <Button size={"icon"} variant="outline">
             <SidebarTrigger />
           </Button>

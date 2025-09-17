@@ -1,7 +1,7 @@
 import {
+  BriefcaseMedical,
   CalendarClock,
   ClipboardPlus,
-  LucideLayoutDashboard,
   Pill,
 } from "lucide-react";
 
@@ -19,9 +19,9 @@ import { useUserContext } from "@/contexts/UserContext";
 
 const navItems = [
   {
-    title: "Dashboard",
+    title: "Patients",
     url: "#",
-    icon: LucideLayoutDashboard,
+    icon: BriefcaseMedical,
   },
   {
     title: "Medicines",
