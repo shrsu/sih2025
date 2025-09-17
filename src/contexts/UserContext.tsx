@@ -1,7 +1,15 @@
-import React, { createContext, useContext, useState, type ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+} from "react";
 
 interface UserContextType {
+  loggedIn: boolean;
   name: string;
+  email: string;
   role: string;
 }
 
@@ -16,11 +24,33 @@ interface UserProviderProps {
   children: ReactNode;
 }
 
+const LOCAL_STORAGE_KEY = "nirmaya-user";
+
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserContextType>({
+    loggedIn: false,
     name: "",
+    email: "",
     role: "",
   });
+
+  useEffect(() => {
+    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (parsed && typeof parsed === "object") {
+          setUser(parsed);
+        }
+      } catch (err) {
+        console.error("Failed to parse user from localStorage:", err);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(user));
+  }, [user]);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

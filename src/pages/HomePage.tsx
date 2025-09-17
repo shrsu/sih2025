@@ -7,8 +7,11 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { Link } from "react-router-dom";
+import { useUserContext } from "@/contexts/UserContext"; // 👈 import context
 
 function HomePage() {
+  const { user } = useUserContext(); // 👈 get user from context
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header */}
@@ -20,36 +23,54 @@ function HomePage() {
           <p className="font-bold text-primary">Nirmaya</p>
         </div>
 
-        <div className="flex gap-4">
-          {/* Sign Up Hover Card */}
-          <HoverCard>
-            <HoverCardTrigger asChild>
-              <Button>Sign Up</Button>
-            </HoverCardTrigger>
-            <HoverCardContent className="flex w-fit mt-2 mr-12 text-center flex-col gap-2">
-              <Button variant="ghost" asChild>
-                <Link to="#">Doctor Sign Up</Link>
-              </Button>
-              <Button variant="ghost" asChild>
-                <Link to="#">Pharmacist Sign Up</Link>
-              </Button>
-            </HoverCardContent>
-          </HoverCard>
+        <div className="flex gap-4 items-center">
+          {/* Conditional based on login */}
+          {user.loggedIn ? (
+            <>
+              {user.role === "doctor" && (
+                <Button asChild>
+                  <Link to="/doctor/dashboard">Doctor Dashboard</Link>
+                </Button>
+              )}
+              {user.role === "pharmacist" && (
+                <Button asChild>
+                  <Link to="/pharmacist/dashboard">Pharmacist Dashboard</Link>
+                </Button>
+              )}
+            </>
+          ) : (
+            <>
+              {/* Sign Up Hover Card */}
+              <HoverCard>
+                <HoverCardTrigger asChild>
+                  <Button>Sign Up</Button>
+                </HoverCardTrigger>
+                <HoverCardContent className="flex w-fit mt-2 mr-12 text-center flex-col gap-2">
+                  <Button variant="ghost" asChild>
+                    <Link to="#">Doctor Sign Up</Link>
+                  </Button>
+                  <Button variant="ghost" asChild>
+                    <Link to="#">Pharmacist Sign Up</Link>
+                  </Button>
+                </HoverCardContent>
+              </HoverCard>
 
-          {/* Sign In Hover Card */}
-          <HoverCard>
-            <HoverCardTrigger asChild>
-              <Button>Sign In</Button>
-            </HoverCardTrigger>
-            <HoverCardContent className="flex w-fit mt-2 mr-12 text-center flex-col gap-2">
-              <Button variant="ghost" asChild>
-                <Link to="/doctor/login">Doctor Login</Link>
-              </Button>
-              <Button variant="ghost" asChild>
-                <Link to="/pharmacist/login">Pharmacist Login</Link>
-              </Button>
-            </HoverCardContent>
-          </HoverCard>
+              {/* Sign In Hover Card */}
+              <HoverCard>
+                <HoverCardTrigger asChild>
+                  <Button>Sign In</Button>
+                </HoverCardTrigger>
+                <HoverCardContent className="flex w-fit mt-2 mr-12 text-center flex-col gap-2">
+                  <Button variant="ghost" asChild>
+                    <Link to="/doctor/login">Doctor Login</Link>
+                  </Button>
+                  <Button variant="ghost" asChild>
+                    <Link to="/pharmacist/login">Pharmacist Login</Link>
+                  </Button>
+                </HoverCardContent>
+              </HoverCard>
+            </>
+          )}
 
           {/* Theme toggle */}
           <ModeToggle />

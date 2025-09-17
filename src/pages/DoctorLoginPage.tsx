@@ -2,7 +2,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -26,6 +26,8 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 
+import { useUserContext } from "@/contexts/UserContext";
+
 const doctorLoginSchema = z.object({
   userId: z.string().min(1, "User ID is required"),
   password: z.string().min(1, "Password is required"),
@@ -36,6 +38,19 @@ type DoctorLoginForm = z.infer<typeof doctorLoginSchema>;
 function DoctorLoginPage() {
   const navigate = useNavigate();
   const [showDialog, setShowDialog] = useState(false);
+  const { user, setUser } = useUserContext();
+
+  useEffect(() => {
+    if (user.loggedIn) {
+      if (user.role === "doctor") {
+        navigate("/doctor/dashboard");
+      } else if (user.role === "pharmacist") {
+        navigate("/pharmacist/dashboard");
+      } else {
+        navigate("/");
+      }
+    }
+  }, [user, navigate]);
 
   const form = useForm<DoctorLoginForm>({
     resolver: zodResolver(doctorLoginSchema),
@@ -49,6 +64,12 @@ function DoctorLoginPage() {
     const { userId, password } = values;
 
     if (userId === "5167399" && password === "5167399") {
+      setUser({
+        loggedIn: true,
+        name: "Balram Pandey",
+        email: "dr.balram.pandey@nirmaya.in",
+        role: "doctor",
+      });
       navigate("/doctor/dashboard");
     } else {
       setShowDialog(true);
@@ -57,7 +78,6 @@ function DoctorLoginPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Header */}
       <header className="flex w-full justify-between px-8 py-4">
         <Link to="/" className="flex items-center gap-4">
           <p className="font-bold border-4 text-xl rounded border-primary text-primary h-10 w-10 flex justify-center items-center">
@@ -68,7 +88,6 @@ function DoctorLoginPage() {
         <ModeToggle />
       </header>
 
-      {/* Centered Form */}
       <main className="flex flex-col flex-1 mb-12 items-center justify-center px-4">
         <div className="w-full max-w-lg mb-4 border border-muted rounded-lg p-8 shadow-sm">
           <h2 className="text-2xl font-bold mb-6 text-center text-primary">
@@ -77,7 +96,6 @@ function DoctorLoginPage() {
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              {/* User ID */}
               <FormField
                 control={form.control}
                 name="userId"
@@ -92,7 +110,6 @@ function DoctorLoginPage() {
                 )}
               />
 
-              {/* Password */}
               <FormField
                 control={form.control}
                 name="password"
@@ -111,14 +128,12 @@ function DoctorLoginPage() {
                 )}
               />
 
-              {/* Submit */}
               <Button type="submit" className="w-full">
                 Sign In
               </Button>
             </form>
           </Form>
 
-          {/* Sign Up */}
           <div className="mt-6 flex flex-col gap-2 text-center text-sm">
             <p>
               Don't have an account?{" "}
@@ -129,7 +144,6 @@ function DoctorLoginPage() {
           </div>
         </div>
 
-        {/* Link to pharmacist */}
         <div className="mt-4 flex flex-col gap-2 text-center text-sm">
           <p>
             Are you a pharmacist?{" "}
@@ -140,7 +154,6 @@ function DoctorLoginPage() {
         </div>
       </main>
 
-      {/* Invalid Credentials Dialog */}
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent>
           <DialogHeader>
